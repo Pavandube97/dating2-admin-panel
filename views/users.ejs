@@ -1,0 +1,195 @@
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">User List</h3>
+            <div class="card-tools">
+              <!-- <a href="/users/create" class="btn btn-primary btn-sm">
+                  <i class="fas fa-plus"></i> Add User
+                </a> -->
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="usersTable" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Occupation  </th>
+                  <th>Gender</th>
+                  <th>Age</th>
+                  <th>Orientation</th>
+                  <th>Profile Completed</th>
+                  <th>Is Blocked</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <% users.forEach((user,index)=> { %>
+                  <tr>
+                    <td>
+                      <%= index + 1 %>
+                    </td>
+                    <td>
+                      <% if (user.profile_image && user.profile_image.length> 0) { %>
+                        <img src="<%= user.profile_image %>" alt="Profile Image"
+                          style="width:30px; height:30px; border-radius:50%; margin-right:5px;">
+                        <% } %>
+                          <%= user.name %>
+                    </td>
+                    <td>
+                      <%= user.job %>
+                    </td>
+                    <td>
+                      <%= user.gender || 'N/A' %>
+                    </td>
+                    <td>
+                      <%= user.age || '' %>
+                    </td>
+                    <td>
+                      <%= user.orientation || 'N/A' %>
+                    </td>
+                    <td>
+                      <% if (user.is_profile_completed) { %>
+                        <span class="badge badge-success">Yes</span>
+                        <% } else { %>
+                          <span class="badge badge-danger">No</span>
+                          <% } %>
+                    </td>
+                    <td>
+                      <label class="switch">
+                        <input type="checkbox" class="block-toggle" data-user-id="<%= user.id %>" <%=user.is_blocked
+                          ? 'checked' : '' %> />
+                        <span class="slider round"></span>
+                      </label>
+                    </td>
+                  </tr>
+                  <% }); %>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<style>
+  /* Switch CSS */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+
+  input:checked+.slider {
+    
+    background-color: #ef4765;
+  }
+
+  input:checked+.slider:before {
+    transform: translateX(22px);
+  }
+
+  .list-group-item {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+</style>
+
+<script>
+ const token = '<%= typeof token !== "undefined" && token ? token : "" %>';
+</script>
+
+<!-- Right after your user table, add this: -->
+<script>
+
+  // Block toggle functionality
+  document.addEventListener('DOMContentLoaded', function() {
+  // Block/Unblock toggle functionality
+  document.querySelectorAll('.block-toggle').forEach(toggle => {
+    toggle.addEventListener('change', function() {
+      const userId = this.dataset.userId;
+      const isBlocked = this.checked;
+      
+      if (confirm(`Are you sure you want to ${isBlocked ? 'block' : 'unblock'} this user?`)) {
+
+        // API call to block/unblock user
+        fetch(`/users/block-toggle/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            block: isBlocked
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.status === 1) {
+            alert(`User successfully ${isBlocked ? 'blocked' : 'unblocked'}`);
+          } else {
+            alert('Operation failed: ' + (data.message || 'Unknown error'));
+            this.checked = !isBlocked; // Revert toggle
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          this.checked = !isBlocked; // Revert toggle
+          alert('Operation failed: ' + error.message);
+        });
+      } else {
+        this.checked = !isBlocked; // Revert toggle
+      }
+    });
+  });
+});
+</script>
+

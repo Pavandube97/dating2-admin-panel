@@ -1,0 +1,123 @@
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Content Moderation List</h3>
+            <div class="card-tools">
+              <!-- Add any tools or buttons if needed -->
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="usersTable" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Reason</th>
+                  <th>Notes</th>
+                  <th>Status</th>
+                  <th>Reported By</th>
+                  <th>reportedUser</th>
+                  <th>Created At</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <% contentModeration.forEach((item, index)=> { %>
+                  <tr>
+                    <td>
+                      <%= index + 1 %>
+                    </td>
+                    <td>
+                      <%= item.content_type %>
+                    </td>
+                    <td>
+                      <%= item.reason %>
+                    </td>
+                    <td>
+                      <%= item.notes %>
+                    </td>
+                    <td>
+                      <%= item.status %>
+                    </td>
+                    <td>
+                      <%= item.reportedBy?.name %>
+                    </td>
+                    <td>
+                      <%= item.reportedUser?.name %>
+                    </td>
+                    <td>
+                      <%= item.createdAt %>
+                    </td>
+                   
+
+
+                  </tr>
+                  <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Add this at the bottom of your content-moderation.ejs file, before closing body tag -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Function to handle API call
+    async function updateModerationStatus(id, userId, action) {
+      try {
+        const response = await fetch('/content-moderation/update', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer <%= token %>' // Use the token from EJS
+          },
+          body: JSON.stringify({
+            id: id,
+            user_id: userId,
+            action: action
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.status === 1) {
+          alert(`Content ${action} successfully`);
+          location.reload(); // Reload the page to see updated status
+        } else {
+          alert('Error: ' + (data.message || 'Failed to update status'));
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+
+    // Attach event listeners to all approve buttons
+    document.querySelectorAll('.approve-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        const id = this.dataset.id;
+        const userId = this.dataset.userId;
+        if (confirm('Are you sure you want to approve this content?')) {
+          updateModerationStatus(id, userId, 'approved');
+        }
+      });
+    });
+
+    // Attach event listeners to all reject buttons
+    document.querySelectorAll('.reject-btn').forEach(button => {
+      button.addEventListener('click', function () {
+        const id = this.dataset.id;
+        const userId = this.dataset.userId;
+        if (confirm('Are you sure you want to reject this content?')) {
+          updateModerationStatus(id, userId, 'rejected');
+        }
+      });
+    });
+  });
+</script>

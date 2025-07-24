@@ -1,0 +1,67 @@
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+      <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+      <li class="nav-item">
+        <a href="/dashboard" class="nav-link <%= currentUrl.startsWith('/dashboard') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-tachometer-alt"></i>
+          <p>
+            Dashboard
+          </p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/users" class="nav-link <%= currentUrl.startsWith('/users') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-user"></i>
+          <p>Users</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/reported-users" class="nav-link <%= currentUrl.startsWith('/reported-users') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-exclamation-triangle"></i>
+          <p>Reported Users</p>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a href="/questions" class="nav-link <%= currentUrl.startsWith('/questions') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-pencil-alt"></i>
+          <p>Quetions</p>
+        </a>
+      </li> -->
+      <li class="nav-item">
+        <a href="/blocked-users" class="nav-link <%= currentUrl.startsWith('/blocked-users') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-ban"></i>
+          <p>Blocked Users</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/content-moderation" class="nav-link <%= currentUrl.startsWith('/content-moderation') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-shield-alt"></i>
+          <p>Content Moderation</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/subscriptions" class="nav-link <%= currentUrl.startsWith('/subscriptions') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-list"></i>
+          <p>Subscriptions</p>
+        </a>
+      </li>  
+      <li class="nav-item">
+        <a href="/revenue" class="nav-link <%= currentUrl.startsWith('/revenue') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-dollar-sign"></i>
+          <p>Revenue</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/notifications" class="nav-link <%= currentUrl.startsWith('/notifications') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-bell"></i>
+          <p>Notifications</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/logout" class="nav-link" onclick="return confirm('Are you sure you want to logout?');">
+          <i class="nav-icon fas fa-sign-out-alt"></i>
+          <p>Logout</p>
+        </a>
+      </li>    
+    </ul>
+  </nav>
