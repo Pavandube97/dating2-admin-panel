@@ -148,33 +148,6 @@ router.get('/reported-users', checkAuth, async (req, res) => {
   }
 });
 
-// Questions List Route
-router.get('/questions', checkAuth, async (req, res) => {
-  try {
-    const response = await axios.get(`${API_BASE}/questions`, {
-      headers: {
-        Authorization: `Bearer ${req.session.token}`
-      }
-    });
-
-    const questions = response.data.data;
-
-    res.render('questions', {
-      questions,
-      title: 'Questions List',
-      currentUrl: req.originalUrl
-    });
-
-  } catch (err) {
-    console.error("Error fetching questions:", err.message);
-
-    res.render('questions', {
-      questions: [],
-      error: 'Failed to load questions',
-      title: 'Questions List'
-    });
-  }
-});
 
 // Blocked Users List Route
 router.get('/blocked-users', checkAuth, async (req, res) => {
@@ -269,8 +242,36 @@ router.get('/revenue', checkAuth, (req, res) => {
   res.render('revenue', { title: 'Revenue' });
 });
 
-router.get('/notifications', checkAuth, (req, res) => {
-  res.render('notifications', { title: 'Notifications' });
+// router.get('/notifications', checkAuth, (req, res) => {
+//   res.render('notifications', { title: 'Notifications' });
+// });
+
+// Reported Users List Route
+router.get('/notifications', checkAuth, async (req, res) => {
+  try {
+    const response = await axios.get(`${API_BASE}/notification`, {
+      headers: {
+        Authorization: `Bearer ${req.session.token}`
+      }
+    });
+    // console.log("Reported Users Response:", response.data);
+    const notifications = response.data.data;
+    console.log("Notifications Data:", notifications);
+    res.render('notifications', {
+      notifications,
+      title: 'Notifications'
+    });
+
+  } catch (err) {
+    console.error("Error fetching reported users:", err.message);
+
+    res.render('notifications', {
+      notifications: [],
+      error: 'Failed to load notifications',
+      title: 'Notifications',
+      currentUrl: req.originalUrl
+    });
+  }
 });
 
 // Route to render edit user form
