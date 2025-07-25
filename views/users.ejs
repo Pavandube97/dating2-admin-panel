@@ -22,8 +22,10 @@
                   <th>Occupation  </th>
                   <th>Gender</th>
                   <th>Age</th>
-                  <th>Orientation</th>
-                  <th>Profile Completed</th>
+                  <th>Approved</th>
+                  <th>Rejected</th>
+                  <th>Ban</th>
+                  <th>Restricted</th>
                   <th>Is Blocked</th>
 
                 </tr>
@@ -39,7 +41,9 @@
                         <img src="<%= user.profile_image %>" alt="Profile Image"
                           style="width:30px; height:30px; border-radius:50%; margin-right:5px;">
                         <% } %>
+                        <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                           <%= user.name %>
+                        </span>
                     </td>
                     <td>
                       <%= user.job %>
@@ -51,15 +55,34 @@
                       <%= user.age || '' %>
                     </td>
                     <td>
-                      <%= user.orientation || 'N/A' %>
-                    </td>
-                    <td>
-                      <% if (user.is_profile_completed) { %>
+                      <% if (user.is_approved) { %>
                         <span class="badge badge-success">Yes</span>
                         <% } else { %>
                           <span class="badge badge-danger">No</span>
                           <% } %>
                     </td>
+                    <td>
+                      <% if (user.is_rejected) { %>
+                        <span class="badge badge-success">Yes</span>
+                        <% } else { %>
+                          <span class="badge badge-danger">No</span>
+                          <% } %>
+                    </td>
+                    <td>
+                      <% if (user.is_ban) { %>
+                        <span class="badge badge-success">Yes</span>
+                        <% } else { %>
+                          <span class="badge badge-danger">No</span>
+                          <% } %>
+                    </td>
+                    <td>
+                      <% if (user.is_restrict) { %>
+                        <span class="badge badge-success">Yes</span>
+                        <% } else { %>
+                          <span class="badge badge-danger">No</span>
+                          <% } %>
+                    </td>
+                  
                     <td>
                       <label class="switch">
                         <input type="checkbox" class="block-toggle" data-user-id="<%= user.id %>" <%=user.is_blocked
@@ -71,6 +94,7 @@
                   <% }); %>
               </tbody>
             </table>
+           
           </div>
 
         </div>
@@ -189,6 +213,56 @@
         this.checked = !isBlocked; // Revert toggle
       }
     });
+  });
+
+  // User status dropdown change functionality
+  document.querySelectorAll('.user-status-dropdown').forEach(dropdown => {
+    dropdown.addEventListener('change', function() {
+      const userId = this.dataset.userId;
+      const userStatus = this.value;
+      const selectElement = this;
+
+      if (confirm(`Are you sure you want to change the user status to ${userStatus}?`)) {
+        fetch('/users/update-status', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            user_status: userStatus,
+            user_id: userId
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.status === 1) {
+            alert('User status updated successfully');
+          } else {
+            alert('Operation failed: ' + (data.message || 'Unknown error'));
+            // Revert dropdown to previous value
+            selectElement.value = selectElement.getAttribute('data-prev-value');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Operation failed: ' + error.message);
+          // Revert dropdown to previous value
+          selectElement.value = selectElement.getAttribute('data-prev-value');
+        });
+      } else {
+        // Revert dropdown to previous value
+        selectElement.value = selectElement.getAttribute('data-prev-value');
+      }
+    });
+
+    // Store initial value to revert if needed
+    dropdown.setAttribute('data-prev-value', dropdown.value);
   });
 });
 </script>

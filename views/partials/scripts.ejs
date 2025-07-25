@@ -49,12 +49,12 @@
       "language": {
         "emptyTable": "No reports found."
       }
-    }).buttons().container().appendTo('#usersTable_wrapper .col-md-6:eq(0)');
+    });
   });
 
-  $('#addQuestionModal').on('hidden.bs.modal', function () {
-    $(this).find('form')[0].reset();
-  });
+  // $('#addQuestionModal').on('hidden.bs.modal', function () {
+  //   $(this).find('form')[0].reset();
+  // });
 
   // $(document).on('click', '.view-qa-btn', function() {
   //     // 'data' should be HTML or formatted Q/A

@@ -12,6 +12,7 @@
           </div>
           <!-- /.card-header -->
           <div class="card-body">
+           
             <table id="usersTable" class="table table-bordered table-striped">
               <thead>
                 <tr>
@@ -19,7 +20,6 @@
                   <th>Profile</th>
                   <th>Name</th>
                   <th>Gender</th>
-                  <th>Description</th>
                   <th>Date</th>
                 </tr>
               </thead>
@@ -31,11 +31,11 @@
                     </td>
                     <td>
                       <% if (block.blocked.profile_image && block.blocked.profile_image.length> 0) { %>
-                        <img src="<%= block.blocked.profile_image %>" alt="Profile Image"
-                          style="width: 50px; height: 50px; border-radius: 50%;">
-                        <% } else { %>
-                          <img src="/public/adminlte/img/default-150x150.png" alt="Default Image"
-                            style="width: 50px; height: 50px; border-radius: 50%;">
+                        <div style="display: flex; align-items: center;">
+                          <img src="<%= block.blocked.profile_image || '/public/adminlte/img/default-150x150.png' %>"
+                               alt="Profile Image"
+                               style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                        </div>
                           <% } %>
                     </td>
                     <td>
@@ -45,15 +45,13 @@
                       <%= block.blocked.gender %>
                     </td>
                     <td>
-                      <%= block.description %>
-                    </td>
-                    <td>
                       <%= new Date(block.created_at).toLocaleString() %>
                     </td>
                   </tr>
                   <% }) %>
               </tbody>
             </table>
+            
           </div>
 
         </div>

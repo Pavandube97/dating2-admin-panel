@@ -43,18 +43,18 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     const response = await axios.get(`${API_BASE}/dashboard`, { headers });
 
     const data = response.data.data || {};
-
-    const totalUsers = data.all_users || 0;
-    const totalBlocked = data.blocked_users || 0;
-    const totalReported = data.resported_users || 0; // Assuming typo in API response key
-    const onlineUsers = data.online_users || 0;
+    console.log("Dashboard Data:", data);
+    const totalUsers = data.totalUsers || 0;
+    const totalBlocked = data.totalBlockedUsers || 0;
+    const totalReported = data.totalReportedUsers || 0; // Assuming typo in API response key
+    const subscribeUsers = data.subscribeUsers || 0;
 
     res.render('dashboard', {
       title: 'Dashboard',
       totalUsers,
       totalBlocked,
       totalReported,
-      onlineUsers
+      subscribeUsers
     });
 
   } catch (err) {
