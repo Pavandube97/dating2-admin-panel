@@ -120,13 +120,13 @@ $(function () {
     datasets: [
       {
         label: 'Digital Goods',
-        backgroundColor: 'rgba(239, 71, 101, 1)',
-        borderColor: 'rgba(239, 71, 101, 0.3)',
+        backgroundColor: 'rgba(60,141,188,0.9)',
+        borderColor: 'rgba(60,141,188,0.8)',
         pointRadius: false,
         pointColor: '#3b8bba',
-        pointStrokeColor: 'rgba(239, 71, 101, 0.3)',
+        pointStrokeColor: 'rgba(60,141,188,1)',
         pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(239, 71, 101, 0.3)',
+        pointHighlightStroke: 'rgba(60,141,188,1)',
         data: [28, 48, 40, 19, 86, 27, 90]
       },
       {
